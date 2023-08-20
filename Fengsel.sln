@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fengselsadministrasjon.ConsoleApp", "Fengselsadministrasjon\Fengselsadministrasjon.ConsoleApp.csproj", "{D6079F5D-8CE1-4F67-AF72-9FB040777220}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fengselsadministrasjon.ConsoleApp", "Fengselsadministrasjon.ConsoleApp\Fengselsadministrasjon.ConsoleApp.csproj", "{D6079F5D-8CE1-4F67-AF72-9FB040777220}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fengselsadministrasjon.Domain", "Fengselsadministrasjon.Domain\Fengselsadministrasjon.Domain.csproj", "{6AF5B7D7-6FE3-4B03-86F5-3B5ED6873E2D}"
 EndProject
