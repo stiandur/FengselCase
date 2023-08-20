@@ -8,6 +8,7 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
     public class FengselsadministrasjonService
     {
         const string seCelleoverSikt = "se celleoversikt";
+        const string seCellekapasitet = "se cellekapasitet";
         const string nyFange = "ny fange";
         const string flyttFange = "flytt fange";
         const string loslatFange = "løslat fange";
@@ -33,7 +34,7 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
 
             PrintIntro(fengsel);
 
-            var gyldigeKommandoer = new List<string> { seCelleoverSikt, nyFange, flyttFange, loslatFange, avslutt };
+            var gyldigeKommandoer = new List<string> { seCelleoverSikt, seCellekapasitet, nyFange, flyttFange, loslatFange, avslutt };
             var kommando = Console.ReadLine();
 
             do
@@ -53,6 +54,16 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
                 if (kommando == seCelleoverSikt)
                 {
                     fengsel.Celler.ForEach(celle => Console.WriteLine(celle));
+                }
+
+                if(kommando == seCellekapasitet)
+                {
+                    Console.WriteLine("Hvilken celle ønsker du å se kapasitet for?");
+                    var celle = GetCellenummer(fengsel);
+
+                    ShortWait();
+                    Console.WriteLine();
+                    Console.WriteLine(celle);
                 }
 
                 if (kommando == nyFange)
@@ -97,12 +108,12 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
 
                     Console.WriteLine();
                     Console.WriteLine("Hvilken celle ønsker du å plassere fangen i?");
-                    var cellenummer = GetCellenummer(tilgjengeligeCeller);
+                    var celle = GetCellenummer(fengsel);
 
-                    fengsel.LeggTilFange(fange, cellenummer);
+                    fengsel.AddFange(fange, celle.Cellenummer);
 
                     Console.WriteLine();
-                    Console.WriteLine($"Fange ved navn {fange.Navn} er nå plassert i celle med nummer {cellenummer}");
+                    Console.WriteLine($"Fange ved navn {fange.Navn} er nå plassert i celle med nummer {celle.Cellenummer}");
                     ShortWait();
                 }
 
@@ -140,12 +151,12 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
                     tilgjengeligeCeller.ForEach(celle => Console.WriteLine(celle));
                     Console.WriteLine();
 
-                    var cellenummer = GetCellenummer(tilgjengeligeCeller);
+                    var celle = GetCellenummer(fengsel);
 
                     try
                     {
-                        fengsel.FlyttFange(fange.Id, cellenummer);
-                        Console.WriteLine($"{fange.Navn} har blitt flyttet til celle {cellenummer}.");
+                        fengsel.FlyttFange(fange.Id, celle.Cellenummer);
+                        Console.WriteLine($"{fange.Navn} har blitt flyttet til celle {celle.Cellenummer}.");
                     }
                     catch (Exception e)
                     {
@@ -173,9 +184,9 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
                 var cellenummer = fangedata.cellenummer;
                 var fange = fangedata.fange;
 
-                if (fange.ErFengslet)
+                if (fange.FengslingsDatoTil > DateTime.Now)
                 {
-                    fengsel.LeggTilFange(fange, cellenummer);
+                    fengsel.AddFange(fange, cellenummer);
                 }
             }
         }
@@ -193,8 +204,6 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
             LongWait();
             Console.WriteLine(fengsel.Beskrivelse);
             Console.WriteLine();
-
-            var gyldigeKommandoer = new List<string> { seCelleoverSikt, nyFange, flyttFange, loslatFange, avslutt };
 
             LongWait();
             Console.WriteLine("Hva ønsker du å gjøre? Her er en liste over mulige kommandoer:");
@@ -219,7 +228,7 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
         {
             var verdi = Console.ReadLine();
 
-            var fange = fengsel.HentFange(verdi);
+            var fange = fengsel.GetFange(verdi);
 
             if (fange is null)
             {
@@ -282,17 +291,20 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
             return parsedDate;
         }
 
-        private static string GetCellenummer(List<Celle> tilgjengeligeCeller)
+        private static Celle GetCellenummer(Fengsel fengsel)
         {
             var verdi = Console.ReadLine();
-            if (string.IsNullOrEmpty(verdi) || !tilgjengeligeCeller.Exists(x => x.Cellenummer == verdi))
+
+            var celle = fengsel.GetCelle(verdi);
+
+            if (celle is null)
             {
                 Console.WriteLine();
                 Console.WriteLine($"Oppgitt cellenummer '{verdi}' er ikke en tilgjenglig celle. Vennligst prøv på nytt:");
-                return GetCellenummer(tilgjengeligeCeller);
+                return GetCellenummer(fengsel);
             }
 
-            return verdi;
+            return celle;
         }
 
         private static void ShortWait() => Thread.Sleep(1000);
@@ -301,11 +313,12 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
         private static void PrintKommandoer()
         {
             Console.WriteLine();
-            Console.WriteLine($"Se celleoversikt: ------------ '{seCelleoverSikt}'");
-            Console.WriteLine($"Legg til ny fange: ----------- '{nyFange}'");
-            Console.WriteLine($"Flytt fange mellom celler: --- '{flyttFange}'");
-            Console.WriteLine($"Løslat fange: ---------------- '{loslatFange}'");
-            Console.WriteLine($"Avslutt: --------------------- '{avslutt}'");
+            Console.WriteLine($"Se celleoversikt: ----------------------- '{seCelleoverSikt}'");
+            Console.WriteLine($"Se cellekapasitet for en enkelt celle: -- '{seCellekapasitet}'");
+            Console.WriteLine($"Legg til ny fange: ---------------------- '{nyFange}'");
+            Console.WriteLine($"Flytt fange mellom celler: -------------- '{flyttFange}'");
+            Console.WriteLine($"Løslat fange: --------------------------- '{loslatFange}'");
+            Console.WriteLine($"Avslutt: -------------------------------- '{avslutt}'");
             Console.WriteLine();
             Console.WriteLine("Kommando:");
         }

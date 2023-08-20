@@ -28,17 +28,17 @@ public class Celle
     {
         if (HarFange(fange.Navn))
         {
-            throw new ArgumentException($"Fange '{fange}' er allerede plassert i denne cellen.");
+            throw new ArgumentException($"Fange '{fange}' er allerede plassert i denne cellen");
         }
 
         if (!HarLedigKapasitet)
         {
-            throw new ArgumentException($"Celle {Cellenummer} har ikke plass til flere fanger.");
+            throw new ArgumentException($"Celle {Cellenummer} har ikke plass til flere fanger");
         }
 
         if(KanIkkeBenytteCellePgaKjonn(fange.Kjonn))
         {
-            throw new ArgumentException($"Fange '{fange}' kan ikke plasseres i denne cellen da den allerede har en fange av motsatt kjønn.");
+            throw new ArgumentException($"Fange '{fange}' kan ikke plasseres i denne cellen da den allerede har en fange av motsatt kjønn");
         }
 
         Fanger.Add(fange);
@@ -50,7 +50,7 @@ public class Celle
 
         if (fange is null)
         {
-            throw new ArgumentException($"Fange ved navn '{fange}' er ikke registrert på denne cellen.");
+            throw new ArgumentException($"Fange ved navn '{fange}' er ikke registrert på denne cellen");
         }
 
         Fanger.Remove(fange);
@@ -60,7 +60,7 @@ public class Celle
     public override string ToString()
     {
         var fanger = string.Join(", ", Fanger);
-        return $"Cellnummer: {Cellenummer}  -  Kapasitet: ({TilgjengeligKapasitet}/{Makskapasitet})  - {fanger}";
+        return $"Cellenummer: {Cellenummer}  -  Kapasitet: ({TilgjengeligKapasitet}/{Makskapasitet})  - {fanger}";
     }
 
 }

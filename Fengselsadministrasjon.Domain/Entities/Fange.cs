@@ -25,13 +25,6 @@ public class Fange
     public DateTime FengslingsDatoFra { get; }
     public DateTime FengslingsDatoTil { get; private set; }
 
-    public bool ErFengslet => FengslingsDatoTil > DateTime.Now;
-
-    public void Loslat()
-    {
-        FengslingsDatoTil = DateTime.Now;
-    }
-
     public override string ToString()
     {
         return Navn;

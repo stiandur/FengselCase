@@ -15,30 +15,36 @@ public class Fengsel
         Celler = new List<Celle>();
     }
 
-    public void LeggTilCelle(Celle celle)
+    public void AddCelle(Celle celle)
     {
         Celler.Add(celle);
     }
 
-    public void LeggTilFange(Fange fange, string cellenummer)
+    public void AddFange(Fange fange, string cellenummer)
     {
-        var celle = FinnCelle(cellenummer);
+        var celle = GetCelle(cellenummer);
         celle.LeggTilFange(fange);
     }
 
     public void FlyttFange(Guid id, string cellenummer)
     {
         var fange = RemoveFangeFraCelle(id);
-        LeggTilFange(fange, cellenummer);
+        AddFange(fange, cellenummer);
     }
 
-    public void LoslatFange(Guid id)
+    public Celle GetCelle(string? cellenummer)
     {
-        var fange = RemoveFangeFraCelle(id);
-        fange.Loslat();
+        var celle = Celler.Find(x => x.Cellenummer == cellenummer);
+
+        if (celle is null)
+        {
+            throw new ArgumentException($"Fant ingen celle med cellenummer {cellenummer}");
+        }
+
+        return celle;
     }
 
-    public Fange? HentFange(string? navn)
+    public Fange? GetFange(string? navn)
     {
         return Celler.Find(x => x.HarFange(navn))?.HentFange(navn);
     }
@@ -50,7 +56,7 @@ public class Fengsel
             for (int celleNummer = 1; celleNummer <= antallCellerPerEtasje; celleNummer++)
             {
                 var celle = new Celle($"{etasjeNummer}0{celleNummer}", makskapasitetPerCelle);
-                LeggTilCelle(celle);
+                AddCelle(celle);
             }
         }
     }
@@ -68,6 +74,11 @@ public class Fengsel
         return Celler.SelectMany(x => x.Fanger).ToList();
     }
 
+    public void LoslatFange(Guid id)
+    {
+        RemoveFangeFraCelle(id);
+    }
+
     private Fange RemoveFangeFraCelle(Guid id)
     {
         var celle = Celler.Find(x => x.HarFange(id));
@@ -79,17 +90,5 @@ public class Fengsel
 
         var fange = celle.RemoveFange(id);
         return fange;
-    }
-
-    private Celle FinnCelle(string cellenummer)
-    {
-        var celle = Celler.Find(x => x.Cellenummer == cellenummer);
-
-        if (celle is null)
-        {
-            throw new ArgumentException($"Fant ingen celle med cellenummer {cellenummer}");
-        }
-
-        return celle;
     }
 }
