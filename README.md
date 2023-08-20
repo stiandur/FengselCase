@@ -11,6 +11,7 @@ Jeg har gjort noen antakelser:
 
 ## Annet
 - Brukernavn og passord til API er per nå satt i appsettings.json. Vanligvis ville jeg satt dette via octopus.
+- Servicen som styrer selve programmet er relativt rotete, men tenker det er greit, da det egentlig ikke er fokuset i denne oppgaven.
 - For å ivareta domenebegreper osv. har jeg kodet delvis på norsk.
 - Det er ikke skrevet tester for alt da det virket noe unødvendig for en case, men det er lagt inn eksempler på tester som demonstrerer hvordan jeg ville gjort det, samt er det samlet veldig mye verifisering i én og samme test for å spare arbeid. Vanligvis ville jeg delt denne "TestAlt"-metoden opp i mer spesifikke tester der man tester enkelt-features.
 
