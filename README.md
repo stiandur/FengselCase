@@ -21,6 +21,9 @@ Jeg har gjort noen antakelser:
 Åpne Fengsel.sln i Visual Studio, sett Fengselsadministrasjon.ConsoleApp som startup project og kjør applikasjonen.
 
 #### Alternativ 2:
+Åpne en terminal og naviger til mappen ved navn "Fengselsadministrasjon.ConsoleApp". Deretter kjør `dotnet run`.
+
+## Bygge og kjøre .exe:
 Åpne en terminal og gå til root av koden der Fengsel.sln ligger og kjør `dotnet publish -c Release -r win10-x64`.
 
-Åpne en file explorer og gå til `Fengselsadministrasjon.ConsoleApp\bin\Release\net6.0\win10-x64` og kjør "Fengselsadministrasjon.ConsoleApp.exe".
+Åpne file explorer og gå til `Fengselsadministrasjon.ConsoleApp\bin\Release\net6.0\win10-x64` og kjør "Fengselsadministrasjon.ConsoleApp.exe".
