@@ -110,11 +110,17 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
                     Console.WriteLine("Hvilken celle ønsker du å plassere fangen i?");
                     var celle = GetCellenummer(fengsel);
 
-                    fengsel.AddFange(fange, celle.Cellenummer);
+                    try
+                    {
+                        fengsel.AddFange(fange, celle.Cellenummer);
 
-                    Console.WriteLine();
-                    Console.WriteLine($"Fange ved navn {fange.Navn} er nå plassert i celle med nummer {celle.Cellenummer}");
-                    ShortWait();
+                        Console.WriteLine();
+                        Console.WriteLine($"Fange ved navn {fange.Navn} er nå plassert i celle med nummer {celle.Cellenummer}");
+                    }
+                    catch (Exception e)
+                    {
+                        PrintFeilmelding(e);
+                    }
                 }
 
                 if (kommando == loslatFange)
@@ -125,10 +131,17 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
                     Console.WriteLine("Vennligst oppgi fullt navn på personen du ønsker å løslate:");
 
                     var fange = HentFange(fengsel);
-                    fengsel.LoslatFange(fange.Id);
-                    Console.WriteLine();
-                    ShortWait();
-                    Console.WriteLine($"Fange ved navn {fange.Navn} har blitt løslatt!");
+                    try
+                    {
+                        fengsel.LoslatFange(fange.Id);
+                        Console.WriteLine();
+                        ShortWait();
+                        Console.WriteLine($"Fange ved navn {fange.Navn} har blitt løslatt!");
+                    }
+                    catch (Exception e)
+                    {
+                        PrintFeilmelding(e);
+                    }
                 }
 
                 if (kommando == flyttFange)
@@ -160,12 +173,11 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"Noe gikk galt: {e.Message}");
-                        Console.WriteLine();
-                        Console.WriteLine("Operasjonen ble avbrutt.");
+                        PrintFeilmelding(e);
                     }
                 }
 
+                ShortWait();
                 Console.WriteLine();
                 Console.WriteLine("Ønsker du å gjøre noe mer?");
                 ShortWait();
@@ -175,6 +187,13 @@ namespace Fengselsadministrasjon.ConsoleApp.Services
 
             } while (kommando != avslutt);
 
+        }
+
+        private static void PrintFeilmelding(Exception e)
+        {
+            Console.WriteLine($"Noe gikk galt: {e.Message}");
+            Console.WriteLine();
+            Console.WriteLine("Operasjonen ble avbrutt.");
         }
 
         private static void PopulateFanger(Fengsel fengsel, List<(string cellenummer, Fange fange)> fangedataResponse)
